@@ -59,6 +59,7 @@ class HospitalUI:
     def log_state(self, state, patient):
         """
         Logs the patient's current state in the corresponding column
+        Also updates the background color based on the patient's condition
         """
         # Remove the patient from the old state column
         for lst in self.columns.values():
@@ -67,6 +68,20 @@ class HospitalUI:
             if display in items:
                 lst.delete(items.index(display))
 
-        # Add the patient to the new state column
+        # Determine background color based on patient's condition
+        color = "white"  # Default color
+        if patient.condition == "Critical":
+            color = "red"
+        elif patient.condition == "Serious":
+            color = "yellow"
+        elif patient.condition == "Stable":
+            color = "lightblue"
+        elif state == "discharged":
+            color = "green"
+
+        # Add the patient to the new state column with the appropriate background color
         if state in self.columns:
             self.columns[state].insert("end", str(patient))
+            # Set the background color for the patient row
+            index = self.columns[state].size() - 1
+            self.columns[state].itemconfig(index, {'bg': color})
