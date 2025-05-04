@@ -25,3 +25,4 @@ def start(ui, beds, docs):
 
 if __name__ == "__main__":
     main()
+    

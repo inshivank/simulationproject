@@ -1,11 +1,11 @@
 import tkinter as tk
+import random  # Importing random for chance of referral
 
 class HospitalUI:
     def __init__(self, root, start_cb, num_beds, num_docs):
         self.root = root
         self.root.title("Hospital Simulation")
 
-        # Status label to show current status
         self.status_var = tk.StringVar(value="Not started")
         
         self._create_top_frame(start_cb, num_beds, num_docs)
@@ -36,6 +36,7 @@ class HospitalUI:
             "waiting_doctor": self._create_column("Waiting for Doctor"),
             "in_treatment": self._create_column("In Treatment"),
             "discharged": self._create_column("Discharged"),
+            "referred": self._create_column("Referred to Another Hospital"),
         }
 
     def _create_column(self, title):
@@ -78,6 +79,14 @@ class HospitalUI:
             color = "lightblue"
         elif state == "discharged":
             color = "green"
+        elif state == "referred":
+            color = "gray"  # Color for referred patients
+
+        # Chance for serious or critical patients to be referred
+        if state == "in_treatment" and patient.condition in ["Critical", "Serious"]:
+            if random.random() < 0.3:  # 30% chance of referral
+                state = "referred"
+                color = "gray"  # Referred patients get gray color
 
         # Add the patient to the new state column with the appropriate background color
         if state in self.columns:
